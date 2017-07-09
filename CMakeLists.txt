@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.4)
 # Define sources and executable
 
 set(EXECUTABLE_NAME "astar")
-add_executable(${EXECUTABLE_NAME} main.cpp)
+add_executable(${EXECUTABLE_NAME} main.cpp Node.cpp Node.h)
 
 # Detect and add SFML
 
