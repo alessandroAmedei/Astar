@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ale/CLionProjects/Astar/Node.cpp
+Node.h
+/home/ale/CLionProjects/Astar/Node.h
+
+/home/ale/CLionProjects/Astar/Node.h
+vector
+-
+
+/home/ale/CLionProjects/Astar/main.cpp
+

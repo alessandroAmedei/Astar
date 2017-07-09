@@ -1,0 +1,3 @@
+/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/astar.dir
