@@ -6,8 +6,14 @@
 #define PROJECT_MAP_H
 
 
-class Map {
+#include "Node.h"
 
+class Map {
+public:
+    void findRoute(Node* source,Node* goal);
+private:
+    int calculateEuristic(Node* n,Node* goal);
+    std::vector<Node*> nodes;
 };
 
 
