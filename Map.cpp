@@ -5,46 +5,78 @@
 #include "Map.h"
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 void Map::findRoute(Node *start, Node *goal) {
     std::vector<Node *> open;
     std::vector<Node *> close;
 
     Node *current;
-    Node *successor;
+    Node *neighbour;
 
     int successor_current_const;
 
-    start->setH(calculateEuristic(start, goal));
+    start->setH(calculateDistance(start, goal));  //Put start in open list and set F to H (because G=0)
     open.push_back(start);
 
-    while (!open.empty()) {
-        std::sort(open.begin(), open.end(), [](Node *a, Node *b) { return (a->getF() < b->getF()); });
-        current = open[0];
+    while (!open.empty()) {  //While open is not empty
+        std::cout<<"open not empty"<<std::endl;
+        std::sort(open.begin(), open.end(), [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
+        current = open[0]; //Take from open list the node current with the lowest f
+
+        open.erase(std::remove(open.begin(),open.end(),current));
+        close.push_back(current);
 
         if (current == goal)
-            return; //FIXME It' s logica that we finished but how to get the route back if it s first while cycle?
+            getPath(start,goal);
 
-        for (auto itr = current->getParents().begin(); itr != current->getParents().end(); itr++) {
-            successor = (*itr).parent;
-            successor_current_const = current->getG() + (*itr).g;  //g(current)+w(current,successor)
+        for(auto itr = current->getParents().begin() ; itr != current->getParents().end() ; itr++){  //For each node successor of the current node
 
-            if (std::find(open.begin(), open.end(), successor) != open.end()) {
-                if ((*itr).g <= successor_current_const)
-                    close.push_back(current);
-            } else if (std::find(close.begin(), close.end(), successor) != close.end()) {
-                if ((*itr).g <= successor_current_const){
-                    close.push_back(current);
-                    close.erase(std::remove(close.begin(),close.end(),successor)); //erase-remove idiom
-                    open.push_back(successor);
-                }
+            neighbour=(*itr);
+
+            if(!neighbour->isWalkable() || std::find(close.begin(),close.end(),neighbour) != close.end())
+                continue;
+
+            int newMovementCostToNeighbour = current->getG() + calculateDistance(current,neighbour);
+
+            if(newMovementCostToNeighbour<neighbour->getG() || std::find(open.begin(),open.end(),neighbour) == open.end()){
+                neighbour->setG(newMovementCostToNeighbour);
+                neighbour->setH(calculateDistance(neighbour,goal));
+                neighbour->setComeFrom(current);
+
+                if(std::find(open.begin(),open.end(),neighbour) == open.end())
+                    open.push_back(neighbour);
             }
-
         }
-
-
     }
+}
 
-    int Map::calculateEuristic(Node *n, Node *goal) { //Distance between two points
-        return static_cast<int>(sqrt(pow(n->getX() - goal->getX(), 2) + pow(n->getY() - goal->getY(), 2)));
+
+
+std::vector<Node*> Map::getPath(Node *a, Node *b) {
+    std::cout << "Now i should give you the path "<<std::endl;
+
+    std::vector<Node*> path;
+    Node* current=b;
+
+    while(a!=current){
+        std::cout<<current->getId()<< " ";
+        path.push_back(current);
+        current=current->getComeFrom();
     }
+    std::cout<<std::endl;
+    std::reverse(path.begin(),path.end());
+
+    return path;
+}
+
+int Map::calculateDistance(Node *a, Node *b) {
+    int x = abs(a->getX()-b->getX());
+    int y = abs(a->getY()-b->getY());
+
+    if(x>y)
+        return 14*y + 10*(x-y);
+    return 14*x + 10*(y-x);
+}
+
+

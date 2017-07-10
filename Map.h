@@ -8,12 +8,13 @@
 
 #include "Node.h"
 
+
 class Map {
 public:
     void findRoute(Node* source,Node* goal);
 private:
-    int calculateEuristic(Node* n,Node* goal);
-    std::vector<Node*> nodes;
+    std::vector<Node*> getPath(Node* a, Node* b);
+    int calculateDistance(Node* a,Node* b);
 };
 
 

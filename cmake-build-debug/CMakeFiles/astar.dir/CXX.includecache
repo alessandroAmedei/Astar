@@ -6,6 +6,20 @@
 
 #IncludeRegexTransform: 
 
+/home/ale/CLionProjects/Astar/Map.cpp
+Map.h
+/home/ale/CLionProjects/Astar/Map.h
+cmath
+-
+algorithm
+-
+iostream
+-
+
+/home/ale/CLionProjects/Astar/Map.h
+Node.h
+/home/ale/CLionProjects/Astar/Node.h
+
 /home/ale/CLionProjects/Astar/Node.cpp
 Node.h
 /home/ale/CLionProjects/Astar/Node.h
@@ -15,4 +29,8 @@ vector
 -
 
 /home/ale/CLionProjects/Astar/main.cpp
+iostream
+-
+Map.h
+/home/ale/CLionProjects/Astar/Map.h
 
