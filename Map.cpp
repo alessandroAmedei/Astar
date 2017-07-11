@@ -6,23 +6,25 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
-Map::Map(int size): _mapsize(size+2) {
+Map::Map(int size) : _mapsize(size + 2) {
 
-
+    int nodesize = 100;
 
 
     for (int r = 0; r < _mapsize; r++) {
         for (int j = 0; j < _mapsize; j++) {
 
             if (r == 0 || j == 0)
-                list.push_back(new Node(r * _mapsize + j, r * 10, j * 10, false));
+                list.push_back(new Node(r * _mapsize + j, r * nodesize + 40, j * nodesize + 40, false));
 
             else if (r == _mapsize - 1 || j == _mapsize - 1)
-                list.push_back(new Node(r * _mapsize + j, r * 10, j * 10, false));
+                list.push_back(new Node(r * _mapsize + j, r * nodesize + 40, j * nodesize + 40, false));
 
             else
-                list.push_back(new Node(r * _mapsize + j, r * 10, j * 10));  //FIXME _mapsize not magic number
+                list.push_back(new Node(r * _mapsize + j, r * nodesize + 40,
+                                        j * nodesize + 40));  //FIXME _mapsize not magic number
 
         }
     }
@@ -48,8 +50,6 @@ Map::Map(int size): _mapsize(size+2) {
     }
 
 
-
-
     std::cout << std::endl;
 
     for (int r = 0; r < _mapsize; r++) {
@@ -62,7 +62,7 @@ Map::Map(int size): _mapsize(size+2) {
 }
 
 void Map::findRoute(int x, int y, int x1, int y1) {
-    findRoute(list[x*_mapsize+y],list[x1*_mapsize+y1]);
+    findRoute(list[x * _mapsize + y], list[x1 * _mapsize + y1]);
 }
 
 
@@ -79,30 +79,33 @@ void Map::findRoute(Node *start, Node *goal) {
     open.push_back(start);
 
     while (!open.empty()) {  //While open is not empty
-        std::sort(open.begin(), open.end(), [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
+        std::sort(open.begin(), open.end(),
+                  [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
         current = open[0]; //Take from open list the node current with the lowest f
 
-        open.erase(std::remove(open.begin(),open.end(),current));
+        open.erase(std::remove(open.begin(), open.end(), current));
         close.push_back(current);
 
         if (current == goal)
-            getPath(start,goal);
+            getPath(start, goal);
 
-        for(auto itr = current->getParents().begin() ; itr != current->getParents().end() ; itr++){  //For each node successor of the current node
+        for (auto itr = current->getParents().begin();
+             itr != current->getParents().end(); itr++) {  //For each node successor of the current node
 
-            neighbour=(*itr);
+            neighbour = (*itr);
 
-            if(!neighbour->isWalkable() || std::find(close.begin(),close.end(),neighbour) != close.end())
+            if (!neighbour->isWalkable() || std::find(close.begin(), close.end(), neighbour) != close.end())
                 continue;
 
-            int newMovementCostToNeighbour = current->getG() + calculateDistance(current,neighbour);
+            int newMovementCostToNeighbour = current->getG() + calculateDistance(current, neighbour);
 
-            if(newMovementCostToNeighbour<neighbour->getG() || std::find(open.begin(),open.end(),neighbour) == open.end()){
+            if (newMovementCostToNeighbour < neighbour->getG() ||
+                std::find(open.begin(), open.end(), neighbour) == open.end()) {
                 neighbour->setG(newMovementCostToNeighbour);
-                neighbour->setH(calculateDistance(neighbour,goal));
+                neighbour->setH(calculateDistance(neighbour, goal));
                 neighbour->setComeFrom(current);
 
-                if(std::find(open.begin(),open.end(),neighbour) == open.end())
+                if (std::find(open.begin(), open.end(), neighbour) == open.end())
                     open.push_back(neighbour);
             }
         }
@@ -110,36 +113,72 @@ void Map::findRoute(Node *start, Node *goal) {
 }
 
 
+std::vector<Node *> Map::getPath(Node *a, Node *b) {
 
-std::vector<Node*> Map::getPath(Node *a, Node *b) {
+    std::vector<Node *> path;
+    Node *current = b;
 
-    std::vector<Node*> path;
-    Node* current=b;
-
-    while(a!=current){
-        std::cout<<current->getId()<< " ";
+    while (a != current) {
+        std::cout << current->getId() << " ";
         path.push_back(current);
-        current=current->getComeFrom();
+        current = current->getComeFrom();
     }
 
-    std::cout<<a->getId()<< " ";
-    std::cout<<std::endl;
-    std::reverse(path.begin(),path.end());
+    std::cout << a->getId() << " ";
+    std::cout << std::endl;
+    std::reverse(path.begin(), path.end());
 
     return path;
 }
 
-void Map::builWall(int x, int y,bool state) {
-    list[x*_mapsize+y]->setWalkable(state);
+void Map::builWall(int x, int y, bool state) {
+    list[x * _mapsize + y]->setWalkable(state);
 }
 
 int Map::calculateDistance(Node *a, Node *b) {
-    int x = abs(a->getX()-b->getX());
-    int y = abs(a->getY()-b->getY());
+    int x = abs(a->getX() - b->getX());
+    int y = abs(a->getY() - b->getY());
 
-    if(x>y)
-        return 14*y + 10*(x-y);
-    return 14*x + 10*(y-x);
+    if (x > y)
+        return 14 * y + 10 * (x - y);
+    return 14 * x + 10 * (y - x);
+}
+
+void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+
+
+    sf::Texture texture;
+    if (!texture.loadFromFile("/home/ale/CLionProjects/Astar/greengray.png")) {
+        std::cout << "error" << std::endl;
+    }
+
+
+    for (int i = 0; i < list.size(); i++) {
+
+        sf::VertexArray quad(sf::Quads, 4);
+
+        int x = list[i]->getX();
+        int y = list[i]->getY();
+
+        quad[0].position = sf::Vector2f(y + 90, x);
+        quad[1].position = sf::Vector2f(y, x);
+        quad[2].position = sf::Vector2f(y, x + 90);
+        quad[3].position = sf::Vector2f(y + 90, x + 90);
+        if (list[i]->isWalkable() == false) {
+            quad[0].texCoords = sf::Vector2f(600, 50);
+            quad[1].texCoords = sf::Vector2f(600, 20);
+            quad[2].texCoords = sf::Vector2f(600, 20);
+            quad[3].texCoords = sf::Vector2f(600, 10);
+        }
+
+        target.draw(quad, &texture);
+    }
+
+
+
+
+
+
 }
 
 

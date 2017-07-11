@@ -6,14 +6,17 @@
 #define PROJECT_MAP_H
 
 
+#include <SFML/Graphics/Drawable.hpp>
 #include "Node.h"
 
 
-class Map {
+class Map : public sf::Drawable {
 public:
     Map(int size);
     void findRoute(int x,int y,int x1,int y1);
     void builWall(int x,int y,bool state);
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
     int _mapsize;
     std::vector<Node *> list;
