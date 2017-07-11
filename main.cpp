@@ -1,60 +1,55 @@
 #include <iostream>
 #include <list>
+#include <SFML/Graphics.hpp>
 #include "Map.h"
 
-int _mapsize=5 +2;
 
-int main(){
-
-    std::vector<Node*> list;
-
-    for(int r=0;r<_mapsize;r++) {
-        for (int j = 0; j < _mapsize; j++){
-
-            if(r==0 || j==0)
-                list.push_back(new Node(r* _mapsize +j, r * 10, j * 10,false));
-
-            else if(r==_mapsize-1 || j==_mapsize-1)
-                list.push_back(new Node(r* _mapsize +j, r * 10, j * 10,false));
-
-            else
-            list.push_back(new Node(r* _mapsize +j, r * 10, j * 10));  //FIXME _mapsize not magic number
-
-    }}
-
-    for(int r=1;r<_mapsize-1;r++) {
-        for (int j = 1; j < _mapsize-1; j++){
-
-            std::vector<Node*>& neighbour = list[r* _mapsize +j]->getParents();
+int main() {
 
 
-
-            neighbour.push_back(list[(r-1)*_mapsize+j+1]);
-                neighbour.push_back(list[(r-1)*_mapsize+j]);
-                neighbour.push_back(list[(r-1)*_mapsize+j-1]);
-
-            neighbour.push_back(list[(r)*_mapsize+j+1]);
-            neighbour.push_back(list[(r)*_mapsize+j-1]);
-
-            neighbour.push_back(list[(r+1)*_mapsize+j+1]);
-            neighbour.push_back(list[(r+1)*_mapsize+j]);
-            neighbour.push_back(list[(r+1)*_mapsize+j-1]);
-
-        }}
+    sf::RenderWindow window (sf::VideoMode(800,600),"Maze");
 
 
-    Map m;
-m.findRoute(list[8],list[30]);
+    while(window.isOpen()){
 
+        sf::Event event;
+        while(window.pollEvent(event)){
 
-    std::cout<<std::endl;
-
-    for(int r=0;r<_mapsize;r++) {
-        for (int j = 0; j < _mapsize; j++) {
-                std::cout<<list[r*_mapsize+j]->isWalkable() << " ";
+            if(event.type==sf::Event::Closed)
+                window.close();
         }
-        std::cout<<std::endl;
+        window.clear(sf::Color::White);
+
+        sf::Sprite sprite;
+        sf::Texture texture;
+        if(!texture.loadFromFile("/home/ale/CLionProjects/Astar/grass2.jpeg")){
+            std::cout<<"error"<<std::endl;
+        }
+
+        sprite.setTextureRect(sf::IntRect(10,10,64,64));
+        sprite.setTexture(texture);
+
+        window.draw(sprite);
+        window.display();
     }
 
-return 0;
+    Map m(5);
+
+    m.builWall(2,2,false);
+    m.builWall(2,3,false);
+    m.builWall(2,4,false);
+    m.builWall(3,3,false);
+    m.builWall(4,3,false);
+    m.builWall(5,3,false);
+
+
+
+    m.findRoute(3,2,5,4);
+
+
+
+
+
+
+    return 0;
 }

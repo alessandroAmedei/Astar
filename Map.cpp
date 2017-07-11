@@ -7,6 +7,65 @@
 #include <algorithm>
 #include <iostream>
 
+Map::Map(int size): _mapsize(size+2) {
+
+
+
+
+    for (int r = 0; r < _mapsize; r++) {
+        for (int j = 0; j < _mapsize; j++) {
+
+            if (r == 0 || j == 0)
+                list.push_back(new Node(r * _mapsize + j, r * 10, j * 10, false));
+
+            else if (r == _mapsize - 1 || j == _mapsize - 1)
+                list.push_back(new Node(r * _mapsize + j, r * 10, j * 10, false));
+
+            else
+                list.push_back(new Node(r * _mapsize + j, r * 10, j * 10));  //FIXME _mapsize not magic number
+
+        }
+    }
+
+    for (int r = 1; r < _mapsize - 1; r++) {
+        for (int j = 1; j < _mapsize - 1; j++) {
+
+            std::vector<Node *> &neighbour = list[r * _mapsize + j]->getParents();
+
+
+            neighbour.push_back(list[(r - 1) * _mapsize + j + 1]);
+            neighbour.push_back(list[(r - 1) * _mapsize + j]);
+            neighbour.push_back(list[(r - 1) * _mapsize + j - 1]);
+
+            neighbour.push_back(list[(r) * _mapsize + j + 1]);
+            neighbour.push_back(list[(r) * _mapsize + j - 1]);
+
+            neighbour.push_back(list[(r + 1) * _mapsize + j + 1]);
+            neighbour.push_back(list[(r + 1) * _mapsize + j]);
+            neighbour.push_back(list[(r + 1) * _mapsize + j - 1]);
+
+        }
+    }
+
+
+
+
+    std::cout << std::endl;
+
+    for (int r = 0; r < _mapsize; r++) {
+        for (int j = 0; j < _mapsize; j++) {
+            std::cout << list[r * _mapsize + j]->isWalkable() << " ";
+        }
+        std::cout << std::endl;
+    }
+
+}
+
+void Map::findRoute(int x, int y, int x1, int y1) {
+    findRoute(list[x*_mapsize+y],list[x1*_mapsize+y1]);
+}
+
+
 void Map::findRoute(Node *start, Node *goal) {
     std::vector<Node *> open;
     std::vector<Node *> close;
@@ -53,7 +112,6 @@ void Map::findRoute(Node *start, Node *goal) {
 
 
 std::vector<Node*> Map::getPath(Node *a, Node *b) {
-    std::cout << "Now i should give you the path "<<std::endl;
 
     std::vector<Node*> path;
     Node* current=b;
@@ -63,10 +121,16 @@ std::vector<Node*> Map::getPath(Node *a, Node *b) {
         path.push_back(current);
         current=current->getComeFrom();
     }
+
+    std::cout<<a->getId()<< " ";
     std::cout<<std::endl;
     std::reverse(path.begin(),path.end());
 
     return path;
+}
+
+void Map::builWall(int x, int y,bool state) {
+    list[x*_mapsize+y]->setWalkable(state);
 }
 
 int Map::calculateDistance(Node *a, Node *b) {
