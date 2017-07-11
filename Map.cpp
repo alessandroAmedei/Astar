@@ -20,7 +20,6 @@ void Map::findRoute(Node *start, Node *goal) {
     open.push_back(start);
 
     while (!open.empty()) {  //While open is not empty
-        std::cout<<"open not empty"<<std::endl;
         std::sort(open.begin(), open.end(), [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
         current = open[0]; //Take from open list the node current with the lowest f
 
