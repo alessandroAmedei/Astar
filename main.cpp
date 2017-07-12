@@ -6,7 +6,9 @@
 
 int main() {
 
-    Map m(20);
+    Map m(30);
+
+
 
 
     sf::RenderWindow window(sf::VideoMode(2560, 1600), "Maze");
@@ -52,7 +54,7 @@ int main() {
 
                     }
                     n = nullptr;
-                } else if (x > 1890 && x < 1890 + 50 || y > 334 && y < 334 + 30) {
+                } else if (x > 1811 && x < 1811 + 200 && y > 555 && y < 555 + 40) {
                     if (buildWall)
                         buildWall = false;
                     else {
@@ -62,7 +64,7 @@ int main() {
                         m.c2 = sf::Color::Blue;
                         selectNodes = false;
                     }
-                } else if (x > 1890 && x < 1890 + 100 || y > 530 && y < 530 + 30) {
+                } else if (x > 1795 && x < 1795 + 200 && y > 655 && y < 655 + 40) {
                     if (selectNodes)
                         selectNodes = false;
                     else {
@@ -72,6 +74,13 @@ int main() {
                         m.c1 = sf::Color::Blue;
                         buildWall = false;
                     }
+                } else if(y>455 && y<455+20){
+                    if(x>1810 && x<1810+90)
+                        m=Map(20);
+                    if(x>1910 && x<1910+90)
+                        m=Map(30);
+                    if(x>2000 && x<2000+90)
+                        m=Map(50);
                 }
 
 

@@ -4,8 +4,6 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/ale/CLionProjects/Astar/Map.cpp" "/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/astar.dir/Map.cpp.o"
-  "/home/ale/CLionProjects/Astar/Node.cpp" "/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/astar.dir/Node.cpp.o"
   "/home/ale/CLionProjects/Astar/main.cpp" "/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/astar.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
@@ -16,6 +14,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/core.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

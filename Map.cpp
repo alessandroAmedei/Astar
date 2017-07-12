@@ -10,7 +10,7 @@
 
 Map::Map(int size) : _mapsize(size + 2) {
 
-    int distance = 1200 / size;
+    int distance = 1250 / size;
 
     for (int r = 0; r < _mapsize; r++) {
         for (int j = 0; j < _mapsize; j++) {
@@ -132,7 +132,7 @@ void Map::buildWall(int x, int y, bool state) {
 
 void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
-    int nodesize = (1200 / (_mapsize - 2)) - 1;
+    int nodesize = (1250 / (_mapsize - 2)) - 1;
 
     sf::Texture texture;
     if (!texture.loadFromFile(
@@ -175,33 +175,42 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     }
 
     text.setFont(font);
-    text.setString(
-            "                                    AStar Maze Solver \n Created by Alessandro Amedei and Edith Ehrenbrandtner \n                                UniFirenze & UniPassau");
+    text.setString("AStar Maze Solver \n Alessandro Amedei");
     text.setColor(sf::Color::Blue);
-    text.setPosition(1700, 40);
+    text.setPosition(1750, 40);
 
     sf::Text wall;
     wall.setFont(font);
     wall.setString("Build Wall");
     wall.setColor(c1);
-    wall.setPosition(1900, 330);
+    wall.setPosition(1820, 550);
 
     sf::Text path;
     path.setFont(font);
     path.setString("Select Nodes");
     path.setColor(c2);
-    path.setPosition(1900, 530);
+    path.setPosition(1800, 650);
+
+
+    sf::Text size;
+    size.setFont(font);
+    size.setString("Map Size  20x20  30x30  50x50");
+    size.setColor(sf::Color::Blue);
+    size.setPosition(1670,450);
+
+
 
 
     target.draw(text);
     target.draw(wall);
     target.draw(path);
+    target.draw(size);
 
 }
 
 Node *Map::getNodeFromCoords(int mx, int my) {
 
-    int nodesize = (1300 / (_mapsize - 2)) - 1;
+    int nodesize = (1250 / (_mapsize - 2)) - 1;
 
     for (int i = 0; i < list.size(); i++) {
 

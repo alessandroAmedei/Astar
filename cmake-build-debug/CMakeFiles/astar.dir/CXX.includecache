@@ -6,27 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/ale/CLionProjects/Astar/Map.cpp
-Map.h
-/home/ale/CLionProjects/Astar/Map.h
-cmath
--
-algorithm
--
-iostream
--
-SFML/Graphics.hpp
--
-
 /home/ale/CLionProjects/Astar/Map.h
 SFML/Graphics/Drawable.hpp
 -
 SFML/Graphics/Color.hpp
 -
-Node.h
-/home/ale/CLionProjects/Astar/Node.h
-
-/home/ale/CLionProjects/Astar/Node.cpp
 Node.h
 /home/ale/CLionProjects/Astar/Node.h
 
