@@ -7,6 +7,7 @@
 
 
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include "Node.h"
 
 
@@ -14,17 +15,21 @@ class Map : public sf::Drawable {
 public:
     Map(int size);
     void findRoute(int x,int y,int x1,int y1);
+    void findRoute(Node* source,Node* goal);
     void buildWall(int x,int y,bool state);
+    Node* getNodeFromCoords(int mx,int my);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    Node* getNodeFromCoords(int mx,int my);
+
+    sf::Color c1;
+    sf::Color c2;
 
 private:
     int _mapsize;
     std::vector<Node *> list;
-    std::vector<Node*> getPath(Node* a, Node* b);
+    std::vector<Node*> getPath(int state,Node* a, Node* b);
     int calculateDistance(Node* a,Node* b);
-    void findRoute(Node* source,Node* goal);
+
 
 
 };

@@ -21,6 +21,8 @@ SFML/Graphics.hpp
 /home/ale/CLionProjects/Astar/Map.h
 SFML/Graphics/Drawable.hpp
 -
+SFML/Graphics/Color.hpp
+-
 Node.h
 /home/ale/CLionProjects/Astar/Node.h
 

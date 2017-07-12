@@ -12,7 +12,7 @@
 
 class Node {
 public:
-    Node(int id,int x,int y,bool walkable=true,int g=0,int h=0): id(id),x(x),y(y),walkable(walkable),g(g),h(h){};
+    Node(int id,int x,int y,bool walkable=true,bool selected=false,int g=0,int h=0): id(id),x(x),y(y),walkable(walkable),selected(selected),g(g),h(h){};
 
     int getId() const { return id; }
     int getX() const { return x; }
@@ -22,6 +22,7 @@ public:
     int getH() const { return h; }
     int getF() const { return g+h; }
     bool isWalkable() const { return walkable; };
+    bool isSelected() const { return selected; }
     Node* getComeFrom()  { return comeFrom; };
     void setId(int id) { Node::id = id; }
     void setX(int x) { Node::x = x; }
@@ -30,12 +31,14 @@ public:
     void setG(int g) { Node::g = g; }
     void setH(int h) { Node::h = h; }
     void setWalkable(bool walkable) { Node::walkable = walkable; } //FIXME Use this or change parameters name
+    void setSelected(bool selected) { Node::selected = selected; }
     void setComeFrom(Node* comeFrom) { Node::comeFrom = comeFrom; }
 
 
 private:
     int id;
     bool walkable;
+    bool selected;
     int x,y;
     std::vector<Node*> parents;
     int g,h;
