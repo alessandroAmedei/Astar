@@ -350,6 +350,9 @@
 		<Unit filename="/home/ale/CLionProjects/Astar/cmake_modules/FindSFML.cmake">
 			<Option virtualFolder="CMake Files\cmake_modules\"/>
 		</Unit>
+		<Unit filename="/home/ale/CLionProjects/Astar/cmake_modules/FindSFML.cmake">
+			<Option virtualFolder="CMake Files\cmake_modules\"/>
+		</Unit>
 		<Unit filename="/home/ale/CLionProjects/Astar/test/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\test\"/>
 		</Unit>
