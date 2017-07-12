@@ -14,15 +14,18 @@ class Map : public sf::Drawable {
 public:
     Map(int size);
     void findRoute(int x,int y,int x1,int y1);
-    void builWall(int x,int y,bool state);
+    void buildWall(int x,int y,bool state);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    Node* getNodeFromCoords(int mx,int my);
+
 private:
     int _mapsize;
     std::vector<Node *> list;
     std::vector<Node*> getPath(Node* a, Node* b);
     int calculateDistance(Node* a,Node* b);
     void findRoute(Node* source,Node* goal);
+
 
 };
 

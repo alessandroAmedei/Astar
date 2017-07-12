@@ -10,22 +10,20 @@
 
 Map::Map(int size) : _mapsize(size + 2) {
 
-    int nodesize = 100;
-
+    int distance = 1200 / size;
 
     for (int r = 0; r < _mapsize; r++) {
         for (int j = 0; j < _mapsize; j++) {
 
             if (r == 0 || j == 0)
-                list.push_back(new Node(r * _mapsize + j, r * nodesize + 40, j * nodesize + 40, false));
+                list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, false));
 
             else if (r == _mapsize - 1 || j == _mapsize - 1)
-                list.push_back(new Node(r * _mapsize + j, r * nodesize + 40, j * nodesize + 40, false));
+                list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, false));
 
             else
-                list.push_back(new Node(r * _mapsize + j, r * nodesize + 40,
-                                        j * nodesize + 40));  //FIXME _mapsize not magic number
-
+                list.push_back(new Node(r * _mapsize + j, r * distance + 40,
+                                        j * distance + 40));
         }
     }
 
@@ -33,7 +31,6 @@ Map::Map(int size) : _mapsize(size + 2) {
         for (int j = 1; j < _mapsize - 1; j++) {
 
             std::vector<Node *> &neighbour = list[r * _mapsize + j]->getParents();
-
 
             neighbour.push_back(list[(r - 1) * _mapsize + j + 1]);
             neighbour.push_back(list[(r - 1) * _mapsize + j]);
@@ -49,15 +46,12 @@ Map::Map(int size) : _mapsize(size + 2) {
         }
     }
 
-
-    std::cout << std::endl;
-
-    for (int r = 0; r < _mapsize; r++) {
+   /* for (int r = 0; r < _mapsize; r++) {
         for (int j = 0; j < _mapsize; j++) {
             std::cout << list[r * _mapsize + j]->isWalkable() << " ";
         }
         std::cout << std::endl;
-    }
+    } */
 
 }
 
@@ -112,6 +106,14 @@ void Map::findRoute(Node *start, Node *goal) {
     }
 }
 
+int Map::calculateDistance(Node *a, Node *b) {
+    int x = abs(a->getX() - b->getX());
+    int y = abs(a->getY() - b->getY());
+
+    if (x > y)
+        return 14 * y + 10 * (x - y);
+    return 14 * x + 10 * (y - x);
+}
 
 std::vector<Node *> Map::getPath(Node *a, Node *b) {
 
@@ -124,34 +126,21 @@ std::vector<Node *> Map::getPath(Node *a, Node *b) {
         current = current->getComeFrom();
     }
 
-    std::cout << a->getId() << " ";
-    std::cout << std::endl;
-    std::reverse(path.begin(), path.end());
-
     return path;
 }
 
-void Map::builWall(int x, int y, bool state) {
+void Map::buildWall(int x, int y, bool state) {
     list[x * _mapsize + y]->setWalkable(state);
-}
-
-int Map::calculateDistance(Node *a, Node *b) {
-    int x = abs(a->getX() - b->getX());
-    int y = abs(a->getY() - b->getY());
-
-    if (x > y)
-        return 14 * y + 10 * (x - y);
-    return 14 * x + 10 * (y - x);
 }
 
 void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
+    int nodesize = (1200 / (_mapsize - 2)) - 1;
 
     sf::Texture texture;
-    if (!texture.loadFromFile("/home/ale/CLionProjects/Astar/greengray.png")) {
-        std::cout << "error" << std::endl;
+    if (!texture.loadFromFile("/home/ale/CLionProjects/Astar/tiles/greengray.png")) {  //FIXME Bad! we don't want absolute path
+        std::cout << "error, can't find tiles" << std::endl;
     }
-
 
     for (int i = 0; i < list.size(); i++) {
 
@@ -160,25 +149,48 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         int x = list[i]->getX();
         int y = list[i]->getY();
 
-        quad[0].position = sf::Vector2f(y + 90, x);
-        quad[1].position = sf::Vector2f(y, x);
-        quad[2].position = sf::Vector2f(y, x + 90);
-        quad[3].position = sf::Vector2f(y + 90, x + 90);
+        quad[0].position = sf::Vector2f(x,y + nodesize);
+        quad[1].position = sf::Vector2f(x,y);
+        quad[2].position = sf::Vector2f(x + nodesize,y);
+        quad[3].position = sf::Vector2f(x + nodesize,y + nodesize);
         if (list[i]->isWalkable() == false) {
             quad[0].texCoords = sf::Vector2f(600, 50);
             quad[1].texCoords = sf::Vector2f(600, 20);
             quad[2].texCoords = sf::Vector2f(600, 20);
             quad[3].texCoords = sf::Vector2f(600, 10);
         }
-
         target.draw(quad, &texture);
     }
 
+    sf::Text text;
+    sf::Font font;
 
+    if(!font.loadFromFile("/home/ale/CLionProjects/Astar/fonts/arial.ttf")){
+        std::cout << "error, can't find arial font";
+    }
 
+    text.setFont(font);
+    text.setString("                                    AStar Maze Solver \n Created by Alessandro Amedei and Edith Ehrenbrandtner \n                                UniFirenze & UniPassau");
+    text.setColor(sf::Color::Blue);
+    text.setPosition(1700,40);
 
+    target.draw(text);
 
+}
 
+Node* Map::getNodeFromCoords(int mx, int my) {
+
+    int nodesize = (1300 / (_mapsize - 2)) - 1;
+
+    for(int i=0;i<list.size();i++){
+
+        int x = list[i]->getX();
+        int y = list[i]->getY();
+
+        if(mx>x && mx<x+nodesize && my>y && my<y+nodesize)
+            return list[i];
+    }
+    return nullptr;
 }
 
 

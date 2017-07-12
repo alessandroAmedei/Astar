@@ -15,8 +15,12 @@ algorithm
 -
 iostream
 -
+SFML/Graphics.hpp
+-
 
 /home/ale/CLionProjects/Astar/Map.h
+SFML/Graphics/Drawable.hpp
+-
 Node.h
 /home/ale/CLionProjects/Astar/Node.h
 
