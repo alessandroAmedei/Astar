@@ -76,7 +76,7 @@ void Map::findRoute(Node *start, Node *goal) {
         close.push_back(current);
 
         if (current == goal)
-            getPath(0,start, goal); // THERE IS A WAY
+            getPath(0, start, goal); // THERE IS A WAY
 
         for (auto itr = current->getParents().begin();
              itr != current->getParents().end(); itr++) {  //For each node successor of the current node
@@ -110,7 +110,7 @@ int Map::calculateDistance(Node *a, Node *b) {
     return 14 * x + 10 * (y - x);
 }
 
-std::vector<Node *> Map::getPath(int state,Node *a, Node *b) {
+std::vector<Node *> Map::getPath(int state, Node *a, Node *b) {
 
     std::vector<Node *> path;
     Node *current = b;
@@ -196,9 +196,7 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     size.setFont(font);
     size.setString("Map Size  20x20  30x30  50x50");
     size.setColor(sf::Color::Blue);
-    size.setPosition(1670,450);
-
-
+    size.setPosition(1670, 450);
 
 
     target.draw(text);
