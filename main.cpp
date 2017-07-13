@@ -24,7 +24,7 @@ int main() {
                 window.close();
 
             if (event.type == sf::Event::MouseButtonPressed) {
-               // std::cout << event.mouseButton.x << "  " << event.mouseButton.y << std::endl;
+                std::cout << event.mouseButton.x << "  " << event.mouseButton.y << std::endl;
                 int x = event.mouseButton.x;
                 int y = event.mouseButton.y;
                 Node *n = m.getNodeFromCoords(x, y);
@@ -68,7 +68,13 @@ int main() {
                         m.c1 = sf::Color::Blue;
                         buildWall = false;
                     }
-                } else if (y > 455 && y < 455 + 20) {
+                }  else if (x > 2060 && x < 2060 + 120 && y > 655 && y < 655 + 40){
+                    m.reset(0);
+                    count=0;
+                }  else if (x > 2060 && x < 2060 + 120 && y > 555 && y < 555 + 40) {
+                    m.reset(1);
+                }
+                    else if (y > 455 && y < 455 + 20) {
                     if (x > 1810 && x < 1810 + 90)
                         m = Map(20);
                     if (x > 1910 && x < 1910 + 90)

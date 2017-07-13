@@ -41,7 +41,6 @@ Map::Map(int size) : _mapsize(size + 2) {
             neighbour.push_back(list[(r + 1) * _mapsize + j + 1]);
             neighbour.push_back(list[(r + 1) * _mapsize + j]);
             neighbour.push_back(list[(r + 1) * _mapsize + j - 1]);
-
         }
     }
 
@@ -50,10 +49,28 @@ Map::Map(int size) : _mapsize(size + 2) {
 
 }
 
-void Map::findRoute(int x, int y, int x1, int y1) {  //FIXME CHeck if we need this
-    findRoute(list[x * _mapsize + y], list[x1 * _mapsize + y1]);
+void Map::reset(int what) {
+    if(what==0){
+    for(int i=0;i<list.size();i++){
+        list[i]->setSelected(false);
+    }
+    }
+    if(what==1){
+        bool walkable;
+        //  list[i]->setWalkable(true); //FIXME It makes walkable also the walles at the border..
+        for (int r = 0; r < _mapsize; r++) {
+            for (int j = 0; j < _mapsize; j++) {
+                if (r == 0 || j == 0)
+                    walkable=false;
+                else if (r == _mapsize - 1 || j == _mapsize - 1)
+                    walkable=false;
+                else
+                    walkable = true;
+                list[r * _mapsize + j]->setWalkable(walkable);
+            }
+        }
+    }
 }
-
 
 void Map::findRoute(Node *start, Node *goal) {
     std::vector<Node *> open;
@@ -68,8 +85,7 @@ void Map::findRoute(Node *start, Node *goal) {
     open.push_back(start);
 
     while (!open.empty()) {  //While open is not empty
-        std::sort(open.begin(), open.end(),
-                  [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
+        std::sort(open.begin(), open.end(), [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
         current = open[0]; //Take from open list the node current with the lowest f
 
         open.erase(std::remove(open.begin(), open.end(), current));
@@ -88,8 +104,7 @@ void Map::findRoute(Node *start, Node *goal) {
 
             int newMovementCostToNeighbour = current->getG() + calculateDistance(current, neighbour);
 
-            if (newMovementCostToNeighbour < neighbour->getG() ||
-                std::find(open.begin(), open.end(), neighbour) == open.end()) {
+            if (newMovementCostToNeighbour < neighbour->getG() || std::find(open.begin(), open.end(), neighbour) == open.end()) {
                 neighbour->setG(newMovementCostToNeighbour);
                 neighbour->setH(calculateDistance(neighbour, goal));
                 neighbour->setComeFrom(current);
@@ -99,6 +114,7 @@ void Map::findRoute(Node *start, Node *goal) {
             }
         }
     }
+    getPath(-1,nullptr,nullptr);
 }
 
 int Map::calculateDistance(Node *a, Node *b) {
@@ -111,8 +127,13 @@ int Map::calculateDistance(Node *a, Node *b) {
 }
 
 std::vector<Node *> Map::getPath(int state, Node *a, Node *b) {
-
     std::vector<Node *> path;
+if(state==-1){
+    stringMsg="Nessun percorso";
+    return path;
+}
+else {
+    stringMsg = "Percorso trovato";  //FIXME Little problem here..
     Node *current = b;
     std::cout << "The fastest route is" << std::endl;
     while (a != current) {
@@ -122,8 +143,8 @@ std::vector<Node *> Map::getPath(int state, Node *a, Node *b) {
         current = current->getComeFrom();
     }
 
-
     return path;
+}
 }
 
 void Map::buildWall(int x, int y, bool state) {
@@ -185,11 +206,23 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     wall.setColor(c1);
     wall.setPosition(1820, 550);
 
+    sf::Text reset2;
+    reset2.setFont(font);
+    reset2.setString(" || Reset");
+    reset2.setColor(sf::Color::Blue);
+    reset2.setPosition(2000,550);
+
     sf::Text path;
     path.setFont(font);
     path.setString("Select Nodes");
     path.setColor(c2);
     path.setPosition(1800, 650);
+
+    sf::Text reset;
+    reset.setFont(font);
+    reset.setString(" || Reset");
+    reset.setColor(sf::Color::Blue);
+    reset.setPosition(2000,650);
 
 
     sf::Text size;
@@ -198,11 +231,17 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     size.setColor(sf::Color::Blue);
     size.setPosition(1670, 450);
 
+    sf::Text textMsg(stringMsg,font,60);
+    textMsg.setPosition(1600,900);
+    textMsg.setColor(sf::Color::Blue);
 
     target.draw(text);
     target.draw(wall);
+    target.draw(reset2);
     target.draw(path);
+    target.draw(reset);
     target.draw(size);
+    target.draw(textMsg);
 
 }
 

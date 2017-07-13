@@ -6,23 +6,24 @@
 #define PROJECT_MAP_H
 
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics.hpp>
 #include "Node.h"
+
 
 
 class Map : public sf::Drawable {
 public:
     Map(int size);
-    void findRoute(int x,int y,int x1,int y1);
     void findRoute(Node* source,Node* goal);
     void buildWall(int x,int y,bool state);
     Node* getNodeFromCoords(int mx,int my);
+    void reset(int what);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     sf::Color c1;
     sf::Color c2;
+    std::string stringMsg;
 
 private:
     int _mapsize;
