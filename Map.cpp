@@ -76,9 +76,17 @@ void Map::reset(int what) {
             }
         }
     }
+    if(what==2){
+        for (int i = 0; i < list.size(); i++) {
+            list[i]->setG(0);
+            list[i]->setH(0);
+        }
+    }
 }
 
 void Map::findRoute(Node *start, Node *goal) {
+    reset(2);
+
     std::vector<Node *> open;
     std::vector<Node *> close;
 
@@ -130,9 +138,11 @@ void Map::findRoute(Node *start, Node *goal) {
 int Map::calculateDistance(Node *a, Node *b) {
     int x = abs(a->getX() - b->getX());
     int y = abs(a->getY() - b->getY());
-    if (x > y)
-        return 14 * y + 10 * (x - y);
-    return 14 * x + 10 * (y - x);
+    //if (x > y)
+      //  return 14 * y + 10 * (x - y);
+    //return 14 * x + 10 * (y - x);
+
+    return (sqrt(x*x+y*y));
 }
 
 std::vector<Node *> Map::getPath(int state, Node *a, Node *b) {
