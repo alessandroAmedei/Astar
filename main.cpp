@@ -86,8 +86,6 @@ int main() {
                     if (x > 2000 && x < 2000 + 90)
                         m = Map(mapsize = 50);
                 }
-
-
             }
         }
         window.clear(sf::Color::Transparent);
@@ -95,6 +93,5 @@ int main() {
         window.draw(m);
         window.display();
     }
-
     return 0;
 }

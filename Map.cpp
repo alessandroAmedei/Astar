@@ -25,7 +25,7 @@ Map::Map(int size, bool random) : _mapsize(size + 2) {
 
             else {
                 if (random)  //FIXME Everytime it has to control if it s random.. make it before the for loop.
-                    randval = rand() % 3;
+                    randval = rand() % 4;
                 else
                     randval = 1;
                 list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, randval, false));
@@ -52,7 +52,7 @@ Map::Map(int size, bool random) : _mapsize(size + 2) {
     }
     c1 = sf::Color::Blue;
     c2 = sf::Color::Blue;
-    stringMsg="";
+    stringMsg = "";
 }
 
 void Map::reset(int what) {
@@ -87,14 +87,14 @@ void Map::reset(int what) {
 
 void Map::findRoute(Node *start, Node *goal) {
     reset(2);
-
+    int k = 0;
     std::vector<Node *> open;
     std::vector<Node *> close;
 
     Node *current;
     Node *neighbour;
 
-    int newMovementCostToNeighbour=0;
+    int newMovementCostToNeighbour = 0;
 
     start->setH(calculateDistance(start, goal));  //Put start in open list and set F to H (because G=0)
     open.push_back(start);
@@ -109,12 +109,14 @@ void Map::findRoute(Node *start, Node *goal) {
 
         if (current == goal) {
             getPath(0, start, goal); // THERE IS A WAY
+            std::cout << "nnnofvv" << " " << k;
             return;
         }
 
         for (auto itr = current->getParents().begin();
              itr != current->getParents().end(); itr++) {  //For each node successor of the current node
-
+            k++;
+            std::cout << "-- " << k << std::endl;
             neighbour = (*itr);
 
             if (!neighbour->isWalkable() || std::find(close.begin(), close.end(), neighbour) != close.end())
@@ -122,7 +124,8 @@ void Map::findRoute(Node *start, Node *goal) {
 
             newMovementCostToNeighbour = current->getG() + calculateDistance(current, neighbour);
 
-            if (newMovementCostToNeighbour < neighbour->getG() || std::find(open.begin(), open.end(), neighbour) == open.end()) {
+            if (newMovementCostToNeighbour < neighbour->getG() ||
+                std::find(open.begin(), open.end(), neighbour) == open.end()) {
                 neighbour->setG(newMovementCostToNeighbour);
                 neighbour->setH(calculateDistance(neighbour, goal));
                 neighbour->setComeFrom(current);
@@ -132,6 +135,7 @@ void Map::findRoute(Node *start, Node *goal) {
             }
         }
     }
+    std::cout << "non" << " " << k;
     getPath(-1, nullptr, nullptr);
 }
 
@@ -178,7 +182,8 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     int nodesize = (1250 / (_mapsize - 2)) - 1;
 
     sf::Texture texture;
-    if (!texture.loadFromFile("/home/ale/CLionProjects/Astar/tiles/greengrayred.png")) {  //FIXME Bad! we don't want absolute path
+    if (!texture.loadFromFile(
+            "/home/ale/CLionProjects/Astar/tiles/greengrayred.png")) {  //FIXME Bad! we don't want absolute path
         std::cout << "error, can't find tiles" << std::endl;
     }
 
