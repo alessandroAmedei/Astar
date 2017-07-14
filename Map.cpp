@@ -8,9 +8,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-Map::Map(int size) : _mapsize(size + 2) {
+Map::Map(int size, bool random) : _mapsize(size + 2) {
 
     int distance = 1250 / size;
+    int randval;
+    srand(time(0));
 
     for (int r = 0; r < _mapsize; r++) {
         for (int j = 0; j < _mapsize; j++) {
@@ -21,8 +23,13 @@ Map::Map(int size) : _mapsize(size + 2) {
             else if (r == _mapsize - 1 || j == _mapsize - 1)
                 list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, false, false));
 
-            else
-                list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, true, false));
+            else {
+                if (random)
+                    randval = rand() % 3;
+                else
+                    randval = 1;
+                list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, randval, false));
+            }
         }
     }
 
@@ -43,27 +50,26 @@ Map::Map(int size) : _mapsize(size + 2) {
             neighbour.push_back(list[(r + 1) * _mapsize + j - 1]);
         }
     }
-
     c1 = sf::Color::Blue;
     c2 = sf::Color::Blue;
-
 }
 
 void Map::reset(int what) {
-    if(what==0){
-    for(int i=0;i<list.size();i++){
-        list[i]->setSelected(false);
+    if (what == 0) {
+        for (int i = 0; i < list.size(); i++) {
+            list[i]->setSelected(false);
+            stringMsg = false;
+        }
     }
-    }
-    if(what==1){
+    if (what == 1) {
         bool walkable;
         //  list[i]->setWalkable(true); //FIXME It makes walkable also the walles at the border..
         for (int r = 0; r < _mapsize; r++) {
             for (int j = 0; j < _mapsize; j++) {
                 if (r == 0 || j == 0)
-                    walkable=false;
+                    walkable = false;
                 else if (r == _mapsize - 1 || j == _mapsize - 1)
-                    walkable=false;
+                    walkable = false;
                 else
                     walkable = true;
                 list[r * _mapsize + j]->setWalkable(walkable);
@@ -85,14 +91,17 @@ void Map::findRoute(Node *start, Node *goal) {
     open.push_back(start);
 
     while (!open.empty()) {  //While open is not empty
-        std::sort(open.begin(), open.end(), [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
+        std::sort(open.begin(), open.end(),
+                  [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
         current = open[0]; //Take from open list the node current with the lowest f
 
         open.erase(std::remove(open.begin(), open.end(), current));
         close.push_back(current);
 
-        if (current == goal)
+        if (current == goal) {
             getPath(0, start, goal); // THERE IS A WAY
+            return;
+        }
 
         for (auto itr = current->getParents().begin();
              itr != current->getParents().end(); itr++) {  //For each node successor of the current node
@@ -104,7 +113,8 @@ void Map::findRoute(Node *start, Node *goal) {
 
             int newMovementCostToNeighbour = current->getG() + calculateDistance(current, neighbour);
 
-            if (newMovementCostToNeighbour < neighbour->getG() || std::find(open.begin(), open.end(), neighbour) == open.end()) {
+            if (newMovementCostToNeighbour < neighbour->getG() ||
+                std::find(open.begin(), open.end(), neighbour) == open.end()) {
                 neighbour->setG(newMovementCostToNeighbour);
                 neighbour->setH(calculateDistance(neighbour, goal));
                 neighbour->setComeFrom(current);
@@ -114,13 +124,12 @@ void Map::findRoute(Node *start, Node *goal) {
             }
         }
     }
-    getPath(-1,nullptr,nullptr);
+    getPath(-1, nullptr, nullptr);
 }
 
 int Map::calculateDistance(Node *a, Node *b) {
     int x = abs(a->getX() - b->getX());
     int y = abs(a->getY() - b->getY());
-
     if (x > y)
         return 14 * y + 10 * (x - y);
     return 14 * x + 10 * (y - x);
@@ -128,27 +137,31 @@ int Map::calculateDistance(Node *a, Node *b) {
 
 std::vector<Node *> Map::getPath(int state, Node *a, Node *b) {
     std::vector<Node *> path;
-if(state==-1){
-    stringMsg="Nessun percorso";
-    return path;
-}
-else {
-    stringMsg = "Percorso trovato";  //FIXME Little problem here..
-    Node *current = b;
-    std::cout << "The fastest route is" << std::endl;
-    while (a != current) {
-        std::cout << current->getId() << " ";
-        current->setSelected(true);
-        path.push_back(current);
-        current = current->getComeFrom();
+    if (state == -1) {
+        stringMsg = "Astar didn't find a route";
+        return path;
+    } else {
+        stringMsg = "Astar found a route \n cost: " + std::to_string(b->getF());
+
+        Node *current = b;
+        while (a != current) {
+            current->setSelected(true);
+            path.push_back(current);
+            current = current->getComeFrom();
+        }
+        return path;
     }
-
-    return path;
-}
 }
 
-void Map::buildWall(int x, int y, bool state) {
-    list[x * _mapsize + y]->setWalkable(state);
+Node *Map::getNodeFromCoords(int mx, int my) {
+    int nodesize = (1250 / (_mapsize - 2)) - 1;
+    for (int i = 0; i < list.size(); i++) {
+        int x = list[i]->getX();
+        int y = list[i]->getY();
+        if (mx > x && mx < x + nodesize && my > y && my < y + nodesize)
+            return list[i];
+    }
+    return nullptr;
 }
 
 void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -164,7 +177,6 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     for (int i = 0; i < list.size(); i++) {
 
         sf::VertexArray quad(sf::Quads, 4);
-
         int x = list[i]->getX();
         int y = list[i]->getY();
 
@@ -179,7 +191,7 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
             quad[3].texCoords = sf::Vector2f(200, 10);
         }
         if (list[i]->isSelected() == true) {
-            quad[0].texCoords = sf::Vector2f(600, 50);
+            quad[0].texCoords = sf::Vector2f(700, 150);
             quad[1].texCoords = sf::Vector2f(600, 20);
             quad[2].texCoords = sf::Vector2f(600, 20);
             quad[3].texCoords = sf::Vector2f(600, 10);
@@ -188,52 +200,40 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         target.draw(quad, &texture);
     }
 
-    sf::Text text;
-    sf::Font font;
 
+    sf::Font font;
     if (!font.loadFromFile("/home/ale/CLionProjects/Astar/fonts/arial.ttf")) {
         std::cout << "error, can't find arial font";
     }
 
-    text.setFont(font);
-    text.setString("AStar Maze Solver \n Alessandro Amedei");
+    sf::Text text("AStar MazeSolver \n Alessandro Amedei \n UniFI", font, 35);
+    text.setStyle(sf::Text::Italic);
     text.setColor(sf::Color::Blue);
     text.setPosition(1750, 40);
 
-    sf::Text wall;
-    wall.setFont(font);
-    wall.setString("Build Wall");
+    sf::Text wall("Build Wall", font);
     wall.setColor(c1);
     wall.setPosition(1820, 550);
 
-    sf::Text reset2;
-    reset2.setFont(font);
-    reset2.setString(" || Reset");
+    sf::Text reset2(" || Reset || Random", font);
     reset2.setColor(sf::Color::Blue);
-    reset2.setPosition(2000,550);
+    reset2.setPosition(2000, 550);
 
-    sf::Text path;
-    path.setFont(font);
-    path.setString("Select Nodes");
+    sf::Text path("Select Nodes", font);
     path.setColor(c2);
     path.setPosition(1800, 650);
 
-    sf::Text reset;
-    reset.setFont(font);
-    reset.setString(" || Reset");
+    sf::Text reset(" || Reset", font);
     reset.setColor(sf::Color::Blue);
-    reset.setPosition(2000,650);
+    reset.setPosition(2000, 650);
 
-
-    sf::Text size;
-    size.setFont(font);
-    size.setString("Map Size  20x20  30x30  50x50");
+    sf::Text size("Map Size  20x20  30x30  50x50", font);
     size.setColor(sf::Color::Blue);
     size.setPosition(1670, 450);
 
-    sf::Text textMsg(stringMsg,font,60);
-    textMsg.setPosition(1600,900);
-    textMsg.setColor(sf::Color::Blue);
+    sf::Text textMsg(stringMsg, font, 50);
+    textMsg.setPosition(1700, 900);
+    textMsg.setColor(sf::Color::Green);
 
     target.draw(text);
     target.draw(wall);
@@ -244,20 +244,3 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(textMsg);
 
 }
-
-Node *Map::getNodeFromCoords(int mx, int my) {
-
-    int nodesize = (1250 / (_mapsize - 2)) - 1;
-
-    for (int i = 0; i < list.size(); i++) {
-
-        int x = list[i]->getX();
-        int y = list[i]->getY();
-
-        if (mx > x && mx < x + nodesize && my > y && my < y + nodesize)
-            return list[i];
-    }
-    return nullptr;
-}
-
-

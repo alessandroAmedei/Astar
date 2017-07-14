@@ -1,8 +1,11 @@
+//
+// Created by ale on 14/07/17.
+//
+
 #include <iostream>
 #include <list>
 #include <SFML/Graphics.hpp>
 #include "Map.h"
-
 
 int main() {
 
@@ -13,6 +16,7 @@ int main() {
     bool buildWall = false;
     bool selectNodes = false;
     int count = 0;
+    int mapsize = 30;
     Node *source;
     Node *goal;
     while (window.isOpen()) {
@@ -39,61 +43,58 @@ int main() {
                             source = n;
                             source->setSelected(true);
                             count++;
-                        } else if (count == 1) {
+                        } else if (count == 1 && source != n) {
                             goal = n;
                             goal->setSelected(true);
                             m.findRoute(source, goal);
                             count = 0;
-
                         }
-
-
                     }
                     n = nullptr;
                 } else if (x > 1811 && x < 1811 + 200 && y > 555 && y < 555 + 40) {
-                    if (buildWall)
+                    if (buildWall) {
                         buildWall = false;
-                    else {
+                        m.c1 = sf::Color::Blue;
+                    } else {
                         buildWall = true;
                         m.c1 = sf::Color::Red;
                         m.c2 = sf::Color::Blue;
                         selectNodes = false;
                     }
                 } else if (x > 1795 && x < 1795 + 200 && y > 655 && y < 655 + 40) {
-                    if (selectNodes)
+                    if (selectNodes) {
                         selectNodes = false;
-                    else {
+                        m.c2 = sf::Color::Blue;
+                    } else {
                         selectNodes = true;
                         m.c2 = sf::Color::Red;
                         m.c1 = sf::Color::Blue;
                         buildWall = false;
                     }
-                }  else if (x > 2060 && x < 2060 + 120 && y > 655 && y < 655 + 40){
+                } else if (x > 2060 && x < 2060 + 120 && y > 655 && y < 655 + 40) {
                     m.reset(0);
-                    count=0;
-                }  else if (x > 2060 && x < 2060 + 120 && y > 555 && y < 555 + 40) {
+                    count = 0;
+                } else if (x > 2060 && x < 2060 + 80 && y > 555 && y < 555 + 40) {
                     m.reset(1);
-                }
-                    else if (y > 455 && y < 455 + 20) {
+                } else if (x > 2140 && x < 2140 + 120 && y > 555 && y < 555 + 40) {
+                    m = Map(mapsize, true);
+                } else if (y > 455 && y < 455 + 20) {
                     if (x > 1810 && x < 1810 + 90)
-                        m = Map(20);
+                        m = Map(mapsize = 20);
                     if (x > 1910 && x < 1910 + 90)
-                        m = Map(30);
+                        m = Map(mapsize = 30);
                     if (x > 2000 && x < 2000 + 90)
-                        m = Map(50);
+                        m = Map(mapsize = 50);
                 }
 
 
             }
         }
-        window.clear(sf::Color::White);
-
+        window.clear(sf::Color::Transparent);
 
         window.draw(m);
         window.display();
     }
 
-
     return 0;
 }
-

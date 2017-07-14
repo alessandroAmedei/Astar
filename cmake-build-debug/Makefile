@@ -252,6 +252,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
+	$(MAKE) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/main.cpp.o
 	$(MAKE) -f CMakeFiles/astar.dir/build.make CMakeFiles/astar.dir/main.cpp.o
 .PHONY : main.cpp.o
 
@@ -261,6 +262,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
+	$(MAKE) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/main.cpp.i
 	$(MAKE) -f CMakeFiles/astar.dir/build.make CMakeFiles/astar.dir/main.cpp.i
 .PHONY : main.cpp.i
 
@@ -270,6 +272,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
+	$(MAKE) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/main.cpp.s
 	$(MAKE) -f CMakeFiles/astar.dir/build.make CMakeFiles/astar.dir/main.cpp.s
 .PHONY : main.cpp.s
 
