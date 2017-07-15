@@ -141,10 +141,7 @@ void Map::findRoute(Node *start, Node *goal) {
 int Map::calculateDistance(Node *a, Node *b) {
     int x = abs(a->getX() - b->getX());
     int y = abs(a->getY() - b->getY());
-    //if (x > y)
-    //  return 14 * y + 10 * (x - y);
-    //return 14 * x + 10 * (y - x);
-    return (sqrt(x * x + y * y));  //JUst calculate the distance between two points (left top corner of every node)
+    return (sqrt(x * x + y * y));  //Just calculate the distance between two points (left top corner of every node)
 }
 
 std::vector<Node *> Map::getPath(int state, Node *a, Node *b) {

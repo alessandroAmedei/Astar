@@ -19,9 +19,11 @@ vector
 /home/ale/CLionProjects/Astar/main.cpp
 iostream
 -
-list
--
 SFML/Graphics.hpp
+-
+SFML/Network.hpp
+-
+SFML/Audio.hpp
 -
 Map.h
 /home/ale/CLionProjects/Astar/Map.h
