@@ -5,7 +5,7 @@ add_subdirectory(test)
 
 set(EXECUTABLE_NAME "astar")
 add_executable(${EXECUTABLE_NAME} main.cpp)
-add_library(core Node.h Map.cpp Map.h main.cpp main.h)
+add_library(core Node.h Map.cpp Map.h main.cpp)
 
 # Detect and add SFML
 

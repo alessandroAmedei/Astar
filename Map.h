@@ -15,9 +15,11 @@ public:
     Node* getNodeFromCoords(int mx,int my);
     void reset(int what);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void playSound(int what);
     sf::Color c1;
     sf::Color c2;
     std::string stringMsg;
+    std::string stringFromInternet;
 
 private:
     int _mapsize;

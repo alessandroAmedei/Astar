@@ -1,12 +1,11 @@
 //
 // Created by ale on 09/07/17.
 //
-
-#include "Map.h"
 #include <cmath>
 #include <algorithm>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Map.h"
 
 Map::Map(int size, bool random) : _mapsize(size + 2) {
 
@@ -247,6 +246,10 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     textMsg.setPosition(1700, 900);
     textMsg.setColor(sf::Color::Green);
 
+    sf::Text textInternet(stringFromInternet, font, 60);
+    textInternet.setPosition(1600, 1200);
+    textInternet.setColor(sf::Color::Yellow);
+
     target.draw(text);
     target.draw(wall);
     target.draw(reset2);
@@ -254,5 +257,6 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(reset);
     target.draw(size);
     target.draw(textMsg);
+    target.draw(textInternet);
 
 }

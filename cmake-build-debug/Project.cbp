@@ -333,9 +333,6 @@
 			<Option target="core"/>
 			<Option target="astar"/>
 		</Unit>
-		<Unit filename="/home/ale/CLionProjects/Astar/main.h">
-			<Option target="core"/>
-		</Unit>
 		<Unit filename="/home/ale/CLionProjects/Astar/test/Tester.cpp">
 			<Option target="runTests"/>
 		</Unit>

@@ -1,11 +1,44 @@
 //
-// Created by ale on 14/07/17.
+// Created by Alessandro Amedei on 14/07/17.
 //
 
 #include <iostream>
-#include <list>
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
+#include <SFML/Audio.hpp>
 #include "Map.h"
+
+void playSound(int what) {
+
+    static sf::SoundBuffer sb;  //They can not go out of scope (sound is a thread!)
+    static sf::Sound sound;
+
+    switch (what) {
+        case 0:
+            sb.loadFromFile("/home/ale/CLionProjects/Astar/sounds/a.wav");
+            break;
+        case 1:
+            sb.loadFromFile("/home/ale/CLionProjects/Astar/sounds/b.wav");
+    }
+    sound.setBuffer(sb);
+    sound.setPlayingOffset(sf::seconds(0.3));
+    sound.play();
+}
+
+std::string getTextFromInternet() {
+    sf::Http http;
+    http.setHost("http://ame97software.altervista.org/");
+
+    sf::Http::Request request;
+    request.setUri("/astar/get.php");
+    request.setHttpVersion(1, 1);
+    sf::Http::Response response = http.sendRequest(request);
+
+    if (response.getStatus() == sf::Http::Response::Ok)
+        return response.getBody();
+    else
+        return "error";
+}
 
 int main() {
 
@@ -21,6 +54,8 @@ int main() {
     Node *goal;
     while (window.isOpen()) {
 
+        m.stringFromInternet = getTextFromInternet();
+
         sf::Event event;
         while (window.pollEvent(event)) {
 
@@ -33,6 +68,7 @@ int main() {
                 int y = event.mouseButton.y;
                 Node *n = m.getNodeFromCoords(x, y);
                 if (n != nullptr) {
+                    playSound(1);
                     if (buildWall) {
                         if (n->isWalkable())
                             n->setWalkable(false);
@@ -61,7 +97,9 @@ int main() {
                         m.c2 = sf::Color::Blue;
                         selectNodes = false;
                     }
+                    playSound(0);
                 } else if (x > 1795 && x < 1795 + 200 && y > 655 && y < 655 + 40) {
+                    playSound(0);
                     if (selectNodes) {
                         selectNodes = false;
                         m.c2 = sf::Color::Blue;
@@ -72,19 +110,28 @@ int main() {
                         buildWall = false;
                     }
                 } else if (x > 2060 && x < 2060 + 120 && y > 655 && y < 655 + 40) {
+                    playSound(0);
                     m.reset(0);
                     count = 0;
                 } else if (x > 2060 && x < 2060 + 80 && y > 555 && y < 555 + 40) {
+                    playSound(0);
                     m.reset(1);
                 } else if (x > 2140 && x < 2140 + 120 && y > 555 && y < 555 + 40) {
+                    playSound(0);
                     m = Map(mapsize, true);
                 } else if (y > 455 && y < 455 + 20) {
-                    if (x > 1810 && x < 1810 + 90)
+                    if (x > 1810 && x < 1810 + 90) {
+                        playSound(0);
                         m = Map(mapsize = 20);
-                    if (x > 1910 && x < 1910 + 90)
+                    }
+                    if (x > 1910 && x < 1910 + 90) {
+                        playSound(0);
                         m = Map(mapsize = 30);
-                    if (x > 2000 && x < 2000 + 90)
+                    }
+                    if (x > 2000 && x < 2000 + 90) {
+                        playSound(0);
                         m = Map(mapsize = 50);
+                    }
                 }
             }
         }
@@ -95,3 +142,4 @@ int main() {
     }
     return 0;
 }
+
