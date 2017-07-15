@@ -19,8 +19,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a53f9622-f0f6-4abb-8c62-389df84cafd8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sounds/a.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sounds/b.wav" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/lib/googletest/codegear/gtest.cbproj" afterPath="$PROJECT_DIR$/test/lib/googletest/codegear/gtest.cbproj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/lib/googletest/codegear/gtest.groupproj" afterPath="$PROJECT_DIR$/test/lib/googletest/codegear/gtest.groupproj" />
@@ -437,7 +435,7 @@
       <updated>1499584266376</updated>
       <workItem from="1499584268301" duration="6220000" />
       <workItem from="1499604063718" duration="83501000" />
-      <workItem from="1500113285106" duration="8953000" />
+      <workItem from="1500113285106" duration="8962000" />
     </task>
     <task id="LOCAL-00001" summary="+ Node Class&#10;">
       <created>1499604949400</created>
@@ -565,7 +563,14 @@
       <option name="project" value="LOCAL" />
       <updated>1500122645651</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Added audio and api comunication (get information through internet)">
+      <created>1500122732541</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1500122732541</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -601,7 +606,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="98674000" />
+    <option name="totallyTimeSpent" value="98683000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
