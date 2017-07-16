@@ -152,8 +152,8 @@ int main() {
                         if (s.compare("error") == 0)
                             m.stringFromInternet = s;
                         else {
-                            std::cout << s << std::endl;
-                            std::cout << s.size() << std::endl;
+                         //   std::cout << s << std::endl;
+                          //  std::cout << s.size() << std::endl;
                             std::vector<char> walkables(s.begin(), s.end());
                             std::vector<int> w(walkables.begin(), walkables.end());  //Trasform string to int vector
                             m = Map(mapsize = 30, w);
