@@ -34,7 +34,7 @@ Map::Map(int size, bool random) : _mapsize(size + 2) {
     addNeighboursCostr();
 }
 
-Map::Map(int size, std::vector<int> &walkables) : _mapsize(size + 2) {
+Map::Map(int size, std::vector<int> &walkables) : _mapsize(size + 2) {  //Get from the intenret
 
     int distance = 1250 / size;
 
@@ -208,8 +208,8 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
             int x = list[r * _mapsize + j]->getX();
             int y = list[r * _mapsize + j]->getY();
 
-            if (r == 0 || j == 0) {}
-            else if (r == _mapsize - 1 || j == _mapsize - 1) {}
+            if (r == 0 || j == 0) {}  //Borders
+            else if (r == _mapsize - 1 || j == _mapsize - 1) {}  //Borders
             else {
                 quad[0].position = sf::Vector2f(x, y + nodesize);
                 quad[1].position = sf::Vector2f(x, y);
@@ -233,7 +233,6 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
             }
         }
     }
-    //**********1
     sf::Font font;
     if (!font.loadFromFile("/home/ale/CLionProjects/Astar/fonts/arial.ttf")) {
         std::cout << "error, can't find arial font";

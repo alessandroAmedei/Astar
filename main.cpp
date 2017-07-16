@@ -58,7 +58,7 @@ int main() {
 
     Map m(30);
 
-    sf::RenderWindow window(sf::VideoMode(2560, 1600), "Maze");
+    sf::RenderWindow window(sf::VideoMode(2560, 1400), "Maze");
 
     bool buildWall = false;
     bool selectNodes = false;
@@ -89,11 +89,11 @@ int main() {
                         else
                             n->setWalkable(true);
                     } else if (selectNodes) {
-                        if (count == 0) {
+                        if (count == 0 && n->isWalkable()) {
                             source = n;
                             source->setSelected(true);
                             count++;
-                        } else if (count == 1 && source != n) {
+                        } else if (count == 1 && source != n && n->isWalkable()) {
                             goal = n;
                             goal->setSelected(true);
                             m.findRoute(source, goal);
@@ -152,8 +152,8 @@ int main() {
                         if (s.compare("error") == 0)
                             m.stringFromInternet = s;
                         else {
-                         //   std::cout << s << std::endl;
-                          //  std::cout << s.size() << std::endl;
+                            //   std::cout << s << std::endl;
+                            //  std::cout << s.size() << std::endl;
                             std::vector<char> walkables(s.begin(), s.end());
                             std::vector<int> w(walkables.begin(), walkables.end());  //Trasform string to int vector
                             m = Map(mapsize = 30, w);
