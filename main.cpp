@@ -26,7 +26,7 @@ void playSound(int what) {
 }
 
 bool isConnection() {  //TODO SFML doesn't provide a way to check internet connection.
-    return false;
+    return true;
 }
 
 std::string getTextFromInternet(int what) {

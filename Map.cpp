@@ -47,7 +47,6 @@ Map::Map(int size, std::vector<int> &walkables) : _mapsize(size + 2) {
     }
 
     addNeighboursCostr();
-
 }
 
 void Map::addNeighboursCostr() {
@@ -175,11 +174,19 @@ std::vector<Node *> Map::getPath(int state, Node *a, Node *b) {
 
 Node *Map::getNodeFromCoords(int mx, int my) {
     int nodesize = (1250 / (_mapsize - 2)) - 1;
-    for (int i = 0; i < list.size(); i++) {
-        int x = list[i]->getX();
-        int y = list[i]->getY();
-        if (mx > x && mx < x + nodesize && my > y && my < y + nodesize)
-            return list[i];
+
+    for (int r = 0; r < _mapsize; r++) {
+        for (int j = 0; j < _mapsize; j++) {
+
+            if (r == 0 || j == 0) {}
+            else if (r == _mapsize - 1 || j == _mapsize - 1) {}
+            else {
+                int x = list[r * _mapsize + j]->getX();
+                int y = list[r * _mapsize + j]->getY();
+                if (mx > x && mx < x + nodesize && my > y && my < y + nodesize)
+                    return list[r * _mapsize + j];
+            }
+        }
     }
     return nullptr;
 }
@@ -194,32 +201,39 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         std::cout << "error, can't find tiles" << std::endl;
     }
 
-    for (int i = 0; i < list.size(); i++) {
+    for (int r = 0; r < _mapsize; r++) {
+        for (int j = 0; j < _mapsize; j++) {
 
-        sf::VertexArray quad(sf::Quads, 4);
-        int x = list[i]->getX();
-        int y = list[i]->getY();
+            sf::VertexArray quad(sf::Quads, 4);
+            int x = list[r * _mapsize + j]->getX();
+            int y = list[r * _mapsize + j]->getY();
 
-        quad[0].position = sf::Vector2f(x, y + nodesize);
-        quad[1].position = sf::Vector2f(x, y);
-        quad[2].position = sf::Vector2f(x + nodesize, y);
-        quad[3].position = sf::Vector2f(x + nodesize, y + nodesize);
-        if (list[i]->isWalkable() == false) {
-            quad[0].texCoords = sf::Vector2f(200, 50);
-            quad[1].texCoords = sf::Vector2f(200, 20);
-            quad[2].texCoords = sf::Vector2f(200, 20);
-            quad[3].texCoords = sf::Vector2f(200, 10);
+            if (r == 0 || j == 0) {}
+            else if (r == _mapsize - 1 || j == _mapsize - 1) {}
+            else {
+                quad[0].position = sf::Vector2f(x, y + nodesize);
+                quad[1].position = sf::Vector2f(x, y);
+                quad[2].position = sf::Vector2f(x + nodesize, y);
+                quad[3].position = sf::Vector2f(x + nodesize, y + nodesize);
+                if (list[r * _mapsize + j]->isWalkable() == false) {
+                    quad[0].texCoords = sf::Vector2f(200, 50);
+                    quad[1].texCoords = sf::Vector2f(200, 20);
+                    quad[2].texCoords = sf::Vector2f(200, 20);
+                    quad[3].texCoords = sf::Vector2f(200, 10);
+                }
+                if (list[r * _mapsize + j]->isSelected() == true) {
+                    quad[0].texCoords = sf::Vector2f(700, 150);
+                    quad[1].texCoords = sf::Vector2f(600, 20);
+                    quad[2].texCoords = sf::Vector2f(600, 20);
+                    quad[3].texCoords = sf::Vector2f(600, 10);
+                }
+
+                target.draw(quad, &texture);
+
+            }
         }
-        if (list[i]->isSelected() == true) {
-            quad[0].texCoords = sf::Vector2f(700, 150);
-            quad[1].texCoords = sf::Vector2f(600, 20);
-            quad[2].texCoords = sf::Vector2f(600, 20);
-            quad[3].texCoords = sf::Vector2f(600, 10);
-        }
-
-        target.draw(quad, &texture);
     }
-
+    //**********1
     sf::Font font;
     if (!font.loadFromFile("/home/ale/CLionProjects/Astar/fonts/arial.ttf")) {
         std::cout << "error, can't find arial font";
@@ -268,3 +282,30 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(textInternet);
 
 }
+
+//****1
+/* for (int i = 0; i < list.size(); i++) {
+
+      sf::VertexArray quad(sf::Quads, 4);
+      int x = list[i]->getX();
+      int y = list[i]->getY();
+
+      quad[0].position = sf::Vector2f(x, y + nodesize);
+      quad[1].position = sf::Vector2f(x, y);
+      quad[2].position = sf::Vector2f(x + nodesize, y);
+      quad[3].position = sf::Vector2f(x + nodesize, y + nodesize);
+      if (list[i]->isWalkable() == false) {
+          quad[0].texCoords = sf::Vector2f(200, 50);
+          quad[1].texCoords = sf::Vector2f(200, 20);
+          quad[2].texCoords = sf::Vector2f(200, 20);
+          quad[3].texCoords = sf::Vector2f(200, 10);
+      }
+      if (list[i]->isSelected() == true) {
+          quad[0].texCoords = sf::Vector2f(700, 150);
+          quad[1].texCoords = sf::Vector2f(600, 20);
+          quad[2].texCoords = sf::Vector2f(600, 20);
+          quad[3].texCoords = sf::Vector2f(600, 10);
+      }
+
+      target.draw(quad, &texture);
+  } */
