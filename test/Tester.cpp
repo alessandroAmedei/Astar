@@ -26,8 +26,10 @@ TEST(Node, DefaultCostructor){
     ASSERT_EQ(n.getParents()[0]->getId(),3);
 
     ASSERT_EQ(n.getX(),5);
+
+    std::cout<<"cc";
 }
 
 TEST(Map, DefaultCostructor){
-   // Map m(50);
+   Map m(50);
 }

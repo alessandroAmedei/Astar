@@ -157,9 +157,9 @@ test/preinstall: test/lib/googletest/preinstall
 # Target rules for target test/CMakeFiles/runTests.dir
 
 # All Build rule for target.
-test/CMakeFiles/runTests.dir/all: CMakeFiles/core.dir/all
 test/CMakeFiles/runTests.dir/all: test/lib/googletest/CMakeFiles/gtest_main.dir/all
 test/CMakeFiles/runTests.dir/all: test/lib/googletest/CMakeFiles/gtest.dir/all
+test/CMakeFiles/runTests.dir/all: CMakeFiles/core.dir/all
 	$(MAKE) -f test/CMakeFiles/runTests.dir/build.make test/CMakeFiles/runTests.dir/depend
 	$(MAKE) -f test/CMakeFiles/runTests.dir/build.make test/CMakeFiles/runTests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles --progress-num=10,11,12 "Built target runTests"

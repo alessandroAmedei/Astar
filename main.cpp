@@ -21,23 +21,30 @@ void playSound(int what) {
             sb.loadFromFile("/home/ale/CLionProjects/Astar/sounds/b.wav");
     }
     sound.setBuffer(sb);
-    sound.setPlayingOffset(sf::seconds(0.3));
+    sound.setPlayingOffset(sf::seconds(0.2));
     sound.play();
 }
 
-std::string getTextFromInternet() {
+std::string getTextFromInternet(int what) {
+    try{
+        std::cout<<"INSIDE"<<std::endl;
     sf::Http http;
+
     http.setHost("http://ame97software.altervista.org/");
 
-    sf::Http::Request request;
-    request.setUri("/astar/get.php");
+
+    sf::Http::Request request("/astar/get.php", sf::Http::Request::Post);
     request.setHttpVersion(1, 1);
+    if (what == 1)
+        request.setBody("value=1");
+
     sf::Http::Response response = http.sendRequest(request);
 
     if (response.getStatus() == sf::Http::Response::Ok)
         return response.getBody();
     else
         return "error";
+    }catch(std::exception e){ std::cout<<"in catch"<<std::endl; return "error";}
 }
 
 int main() {
@@ -54,7 +61,7 @@ int main() {
     Node *goal;
     while (window.isOpen()) {
 
-        m.stringFromInternet = getTextFromInternet();
+        m.stringFromInternet = getTextFromInternet(0);
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -131,6 +138,19 @@ int main() {
                     if (x > 2000 && x < 2000 + 90) {
                         playSound(0);
                         m = Map(mapsize = 50);
+                    }
+                    if (x > 2090 && x < 2090 + 90) {
+                        playSound(0);
+                        std::string s = getTextFromInternet(1);
+                        if (s.compare("error") == 0)
+                            m.stringMsg = s;
+                        else {
+                            std::cout << s << std::endl;
+                            std::cout << s.size() << std::endl;
+                            std::vector<char> walkables(s.begin(), s.end());
+                            std::vector<int> w(walkables.begin(), walkables.end());  //Trasform string to int vector
+                            m = Map(mapsize = 30, w);
+                        }
                     }
                 }
             }

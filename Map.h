@@ -11,11 +11,11 @@
 class Map : public sf::Drawable {
 public:
     Map(int size,bool random=false);
+    Map(int size,std::vector<int>& walkables);  //FROM THE INTERNET
     void findRoute(Node* source,Node* goal);
     Node* getNodeFromCoords(int mx,int my);
     void reset(int what);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    void playSound(int what);
     sf::Color c1;
     sf::Color c2;
     std::string stringMsg;
@@ -26,6 +26,7 @@ private:
     std::vector<Node *> list;
     std::vector<Node*> getPath(int state,Node* a, Node* b);
     int calculateDistance(Node* a,Node* b);
+    void addNeighboursCostr();
 };
 
 #endif //PROJECT_MAP_H

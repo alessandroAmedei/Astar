@@ -32,18 +32,32 @@ Map::Map(int size, bool random) : _mapsize(size + 2) {
         }
     }
 
+    addNeighboursCostr();
+}
+
+Map::Map(int size, std::vector<int>& walkables):_mapsize(size + 2) {
+
+    int distance = 1250 / size;
+
+    for (int r = 0; r < _mapsize; r++) {
+        for (int j = 0; j < _mapsize; j++) {
+                list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, walkables[j*_mapsize+r]-48, false));  //TUrned
+            }
+        }
+
+    addNeighboursCostr();
+
+}
+
+void Map::addNeighboursCostr() {
     for (int r = 1; r < _mapsize - 1; r++) {
         for (int j = 1; j < _mapsize - 1; j++) {
-
             std::vector<Node *> &neighbour = list[r * _mapsize + j]->getParents();
-
             neighbour.push_back(list[(r - 1) * _mapsize + j + 1]);
             neighbour.push_back(list[(r - 1) * _mapsize + j]);
             neighbour.push_back(list[(r - 1) * _mapsize + j - 1]);
-
             neighbour.push_back(list[(r) * _mapsize + j + 1]);
             neighbour.push_back(list[(r) * _mapsize + j - 1]);
-
             neighbour.push_back(list[(r + 1) * _mapsize + j + 1]);
             neighbour.push_back(list[(r + 1) * _mapsize + j]);
             neighbour.push_back(list[(r + 1) * _mapsize + j - 1]);
@@ -235,7 +249,7 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     reset.setColor(sf::Color::Blue);
     reset.setPosition(2000, 650);
 
-    sf::Text size("Map Size  20x20  30x30  50x50", font);
+    sf::Text size("Map Size  20x20  30x30  50x50  Online", font);
     size.setColor(sf::Color::Blue);
     size.setPosition(1670, 450);
 
