@@ -25,26 +25,33 @@ void playSound(int what) {
     sound.play();
 }
 
+bool isConnection() {  //TODO SFML doesn't provide a way to check internet connection.
+    return false;
+}
+
 std::string getTextFromInternet(int what) {
-    try{
-        std::cout<<"INSIDE"<<std::endl;
-    sf::Http http;
-
-    http.setHost("http://ame97software.altervista.org/");
-
-
-    sf::Http::Request request("/astar/get.php", sf::Http::Request::Post);
-    request.setHttpVersion(1, 1);
-    if (what == 1)
-        request.setBody("value=1");
-
-    sf::Http::Response response = http.sendRequest(request);
-
-    if (response.getStatus() == sf::Http::Response::Ok)
-        return response.getBody();
-    else
+    if (!isConnection())
         return "error";
-    }catch(std::exception e){ std::cout<<"in catch"<<std::endl; return "error";}
+
+    try {
+        sf::Http http;
+
+        http.setHost("http://ame97software.altervista.org/");
+
+        sf::Http::Request request("/astar/get.php", sf::Http::Request::Post);
+        request.setHttpVersion(1, 1);
+        if (what == 1)
+            request.setBody("value=1");
+
+        sf::Http::Response response = http.sendRequest(request);
+
+        if (response.getStatus() == sf::Http::Response::Ok)
+            return response.getBody();
+        else
+            return "error";
+    } catch (std::exception e) {
+        return "error";
+    }
 }
 
 int main() {
@@ -70,7 +77,7 @@ int main() {
                 window.close();
 
             if (event.type == sf::Event::MouseButtonPressed) {
-                std::cout << event.mouseButton.x << "  " << event.mouseButton.y << std::endl;
+                //   std::cout << event.mouseButton.x << "  " << event.mouseButton.y << std::endl;
                 int x = event.mouseButton.x;
                 int y = event.mouseButton.y;
                 Node *n = m.getNodeFromCoords(x, y);
@@ -116,7 +123,7 @@ int main() {
                         m.c1 = sf::Color::Blue;
                         buildWall = false;
                     }
-                } else if (x > 2060 && x < 2060 + 120 && y > 655 && y < 655 + 40) {
+                } else if (x > 2030 && x < 2030 + 120 && y > 655 && y < 655 + 40) {
                     playSound(0);
                     m.reset(0);
                     count = 0;
@@ -143,7 +150,7 @@ int main() {
                         playSound(0);
                         std::string s = getTextFromInternet(1);
                         if (s.compare("error") == 0)
-                            m.stringMsg = s;
+                            m.stringFromInternet = s;
                         else {
                             std::cout << s << std::endl;
                             std::cout << s.size() << std::endl;
@@ -155,8 +162,7 @@ int main() {
                 }
             }
         }
-        window.clear(sf::Color::Transparent);
-
+        window.clear(sf::Color::White);
         window.draw(m);
         window.display();
     }

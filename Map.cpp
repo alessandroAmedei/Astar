@@ -1,5 +1,5 @@
 //
-// Created by ale on 09/07/17.
+// Created by Alessandro Amedei on 09/07/17.
 //
 #include <cmath>
 #include <algorithm>
@@ -31,19 +31,20 @@ Map::Map(int size, bool random) : _mapsize(size + 2) {
             }
         }
     }
-
     addNeighboursCostr();
 }
 
-Map::Map(int size, std::vector<int>& walkables):_mapsize(size + 2) {
+Map::Map(int size, std::vector<int> &walkables) : _mapsize(size + 2) {
 
     int distance = 1250 / size;
 
     for (int r = 0; r < _mapsize; r++) {
         for (int j = 0; j < _mapsize; j++) {
-                list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, walkables[j*_mapsize+r]-48, false));  //TUrned
-            }
+            list.push_back(
+                    new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, walkables[j * _mapsize + r] - 48,
+                             false));  //TUrned
         }
+    }
 
     addNeighboursCostr();
 
@@ -100,7 +101,7 @@ void Map::reset(int what) {
 
 void Map::findRoute(Node *start, Node *goal) {
     reset(2);
-    int k = 0;
+
     std::vector<Node *> open;
     std::vector<Node *> close;
 
@@ -122,14 +123,11 @@ void Map::findRoute(Node *start, Node *goal) {
 
         if (current == goal) {
             getPath(0, start, goal); // THERE IS A WAY
-            std::cout << "nnnofvv" << " " << k;
             return;
         }
 
         for (auto itr = current->getParents().begin();
              itr != current->getParents().end(); itr++) {  //For each node successor of the current node
-            k++;
-            std::cout << "-- " << k << std::endl;
             neighbour = (*itr);
 
             if (!neighbour->isWalkable() || std::find(close.begin(), close.end(), neighbour) != close.end())
@@ -148,7 +146,6 @@ void Map::findRoute(Node *start, Node *goal) {
             }
         }
     }
-    std::cout << "non" << " " << k;
     getPath(-1, nullptr, nullptr);
 }
 
