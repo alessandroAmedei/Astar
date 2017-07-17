@@ -220,6 +220,9 @@ SFML_AUDIO_LIBRARY_STATIC_DEBUG:FILEPATH=SFML_AUDIO_LIBRARY_STATIC_DEBUG-NOTFOUN
 //Path to a library.
 SFML_AUDIO_LIBRARY_STATIC_RELEASE:FILEPATH=SFML_AUDIO_LIBRARY_STATIC_RELEASE-NOTFOUND
 
+//The directory containing a CMake configuration file for SFML.
+SFML_DIR:PATH=SFML_DIR-NOTFOUND
+
 //Path to a library.
 SFML_GRAPHICS_LIBRARY_DYNAMIC_DEBUG:FILEPATH=SFML_GRAPHICS_LIBRARY_DYNAMIC_DEBUG-NOTFOUND
 
@@ -283,8 +286,14 @@ SFML_WINDOW_LIBRARY_STATIC_DEBUG:FILEPATH=SFML_WINDOW_LIBRARY_STATIC_DEBUG-NOTFO
 //Path to a library.
 SFML_WINDOW_LIBRARY_STATIC_RELEASE:FILEPATH=SFML_WINDOW_LIBRARY_STATIC_RELEASE-NOTFOUND
 
-//Dependencies for target
-core_LIB_DEPENDS:STATIC=
+//Dependencies for the target
+astar2_LIB_DEPENDS:STATIC=general;/usr/lib/x86_64-linux-gnu/libsfml-system.so;general;/usr/lib/x86_64-linux-gnu/libsfml-window.so;general;/usr/lib/x86_64-linux-gnu/libsfml-graphics.so;general;/usr/lib/x86_64-linux-gnu/libsfml-network.so;general;/usr/lib/x86_64-linux-gnu/libsfml-audio.so;
+
+//Dependencies for the target
+astar_LIB_DEPENDS:STATIC=general;/usr/lib/x86_64-linux-gnu/libsfml-system.so;general;/usr/lib/x86_64-linux-gnu/libsfml-window.so;general;/usr/lib/x86_64-linux-gnu/libsfml-graphics.so;general;/usr/lib/x86_64-linux-gnu/libsfml-network.so;general;/usr/lib/x86_64-linux-gnu/libsfml-audio.so;
+
+//Dependencies for the target
+core_LIB_DEPENDS:STATIC=general;/usr/lib/x86_64-linux-gnu/libsfml-system.so;general;/usr/lib/x86_64-linux-gnu/libsfml-window.so;general;/usr/lib/x86_64-linux-gnu/libsfml-graphics.so;general;/usr/lib/x86_64-linux-gnu/libsfml-network.so;general;/usr/lib/x86_64-linux-gnu/libsfml-audio.so;
 
 //Value Computed by CMake
 gtest_BINARY_DIR:STATIC=/home/ale/CLionProjects/Astar/cmake-build-debug/test/lib/googletest

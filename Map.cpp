@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Network/Socket.hpp>
+#include <SFML/Network/Http.hpp>
 #include "Map.h"
 
 Map::Map(int size, bool random) : _mapsize(size + 2) {
@@ -23,8 +25,8 @@ Map::Map(int size, bool random) : _mapsize(size + 2) {
                 list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, false, false));
 
             else {
-                if (random)  //FIXME Everytime it has to control if it s random.. make it before the for loop.
-                    randval = rand() % 4;
+                if (random)
+                    randval = rand() % 3;
                 else
                     randval = 1;
                 list.push_back(new Node(r * _mapsize + j, r * distance + 40, j * distance + 40, randval, false));
@@ -77,7 +79,6 @@ void Map::reset(int what) {
     }
     if (what == 1) {
         bool walkable;
-        //  list[i]->setWalkable(true); //FIXME It makes walkable also the walles at the border..
         for (int r = 0; r < _mapsize; r++) {
             for (int j = 0; j < _mapsize; j++) {
                 if (r == 0 || j == 0)
@@ -98,7 +99,7 @@ void Map::reset(int what) {
     }
 }
 
-void Map::findRoute(Node *start, Node *goal) {
+bool Map::findRoute(Node *start, Node *goal) {
     reset(2);
 
     std::vector<Node *> open;
@@ -114,7 +115,7 @@ void Map::findRoute(Node *start, Node *goal) {
 
     while (!open.empty()) {  //While open is not empty
         std::sort(open.begin(), open.end(),
-                  [](Node *a, Node *b) { return (a->getF() < b->getF()); }); //FIXME If it s equal check H!
+                  [](Node *a, Node *b) { return (a->getF() < b->getF()); });
         current = open[0]; //Take from open list the node current with the lowest f
 
         open.erase(std::remove(open.begin(), open.end(), current));
@@ -122,7 +123,7 @@ void Map::findRoute(Node *start, Node *goal) {
 
         if (current == goal) {
             getPath(0, start, goal); // THERE IS A WAY
-            return;
+            return true;
         }
 
         for (auto itr = current->getParents().begin();
@@ -146,6 +147,7 @@ void Map::findRoute(Node *start, Node *goal) {
         }
     }
     getPath(-1, nullptr, nullptr);
+    return false;
 }
 
 int Map::calculateDistance(Node *a, Node *b) {
@@ -227,9 +229,7 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
                     quad[2].texCoords = sf::Vector2f(600, 20);
                     quad[3].texCoords = sf::Vector2f(600, 10);
                 }
-
                 target.draw(quad, &texture);
-
             }
         }
     }
@@ -240,36 +240,36 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
     sf::Text text("AStar MazeSolver \n Alessandro Amedei \n UniFI", font, 35);
     text.setStyle(sf::Text::Italic);
-    text.setColor(sf::Color::Blue);
+    text.setFillColor(sf::Color::Blue);
     text.setPosition(1750, 40);
 
     sf::Text wall("Build Wall", font);
-    wall.setColor(c1);
+    wall.setFillColor(c1);
     wall.setPosition(1820, 550);
 
     sf::Text reset2(" || Reset || Random", font);
-    reset2.setColor(sf::Color::Blue);
+    reset2.setFillColor(sf::Color::Blue);
     reset2.setPosition(2000, 550);
 
     sf::Text path("Select Nodes", font);
-    path.setColor(c2);
+    path.setFillColor(c2);
     path.setPosition(1800, 650);
 
     sf::Text reset(" || Reset", font);
-    reset.setColor(sf::Color::Blue);
+    reset.setFillColor(sf::Color::Blue);
     reset.setPosition(2000, 650);
 
     sf::Text size("Map Size  20x20  30x30  50x50  Online", font);
-    size.setColor(sf::Color::Blue);
+    size.setFillColor(sf::Color::Blue);
     size.setPosition(1670, 450);
 
     sf::Text textMsg(stringMsg, font, 50);
     textMsg.setPosition(1700, 900);
-    textMsg.setColor(sf::Color::Green);
+    textMsg.setFillColor(sf::Color::Green);
 
     sf::Text textInternet(stringFromInternet, font, 60);
     textInternet.setPosition(1600, 1200);
-    textInternet.setColor(sf::Color::Yellow);
+    textInternet.setFillColor(sf::Color::Cyan);
 
     target.draw(text);
     target.draw(wall);
@@ -281,30 +281,3 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(textInternet);
 
 }
-
-//****1
-/* for (int i = 0; i < list.size(); i++) {
-
-      sf::VertexArray quad(sf::Quads, 4);
-      int x = list[i]->getX();
-      int y = list[i]->getY();
-
-      quad[0].position = sf::Vector2f(x, y + nodesize);
-      quad[1].position = sf::Vector2f(x, y);
-      quad[2].position = sf::Vector2f(x + nodesize, y);
-      quad[3].position = sf::Vector2f(x + nodesize, y + nodesize);
-      if (list[i]->isWalkable() == false) {
-          quad[0].texCoords = sf::Vector2f(200, 50);
-          quad[1].texCoords = sf::Vector2f(200, 20);
-          quad[2].texCoords = sf::Vector2f(200, 20);
-          quad[3].texCoords = sf::Vector2f(200, 10);
-      }
-      if (list[i]->isSelected() == true) {
-          quad[0].texCoords = sf::Vector2f(700, 150);
-          quad[1].texCoords = sf::Vector2f(600, 20);
-          quad[2].texCoords = sf::Vector2f(600, 20);
-          quad[3].texCoords = sf::Vector2f(600, 10);
-      }
-
-      target.draw(quad, &texture);
-  } */

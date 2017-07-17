@@ -14,7 +14,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/core.dir/DependInfo.cmake"
+  "/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles/astar2.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

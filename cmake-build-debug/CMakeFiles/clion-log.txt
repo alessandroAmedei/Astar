@@ -1,6 +1,5 @@
 /home/ale/Documenti/clion-2016.3.5/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/ale/CLionProjects/Astar
 -- Found SFML 2.4.0 in /usr/include
--- Found SFML 2.4.0 in /usr/include
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/ale/CLionProjects/Astar/cmake-build-debug

@@ -5,10 +5,7 @@
 #ifndef PROJECT_NODE_H
 #define PROJECT_NODE_H
 
-
 #include <vector>
-
-
 
 class Node {
 public:
@@ -34,7 +31,6 @@ public:
     void setSelected(bool selected) { Node::selected = selected; }
     void setComeFrom(Node* comeFrom) { Node::comeFrom = comeFrom; }
 
-
 private:
     int id;
     bool walkable;
@@ -45,8 +41,5 @@ private:
     Node* comeFrom;
 
 };
-
-
-
 
 #endif //PROJECT_NODE_H

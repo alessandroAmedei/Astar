@@ -95,7 +95,12 @@ astar: /usr/lib/x86_64-linux-gnu/libsfml-window.so
 astar: /usr/lib/x86_64-linux-gnu/libsfml-graphics.so
 astar: /usr/lib/x86_64-linux-gnu/libsfml-network.so
 astar: /usr/lib/x86_64-linux-gnu/libsfml-audio.so
-astar: libcore.a
+astar: libastar2.a
+astar: /usr/lib/x86_64-linux-gnu/libsfml-system.so
+astar: /usr/lib/x86_64-linux-gnu/libsfml-window.so
+astar: /usr/lib/x86_64-linux-gnu/libsfml-graphics.so
+astar: /usr/lib/x86_64-linux-gnu/libsfml-network.so
+astar: /usr/lib/x86_64-linux-gnu/libsfml-audio.so
 astar: CMakeFiles/astar.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ale/CLionProjects/Astar/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable astar"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/astar.dir/link.txt --verbose=$(VERBOSE)

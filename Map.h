@@ -12,7 +12,7 @@ class Map : public sf::Drawable {
 public:
     Map(int size,bool random=false);
     Map(int size,std::vector<int>& walkables);  //FROM THE INTERNET
-    void findRoute(Node* source,Node* goal);
+    bool findRoute(Node* source,Node* goal);
     Node* getNodeFromCoords(int mx,int my);
     void reset(int what);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

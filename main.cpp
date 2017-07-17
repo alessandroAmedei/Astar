@@ -9,27 +9,28 @@
 #include "Map.h"
 
 void playSound(int what) {
-
     static sf::SoundBuffer sb;  //They can not go out of scope (sound is a thread!)
     static sf::Sound sound;
-
     switch (what) {
         case 0:
             sb.loadFromFile("/home/ale/CLionProjects/Astar/sounds/a.wav");
             break;
         case 1:
             sb.loadFromFile("/home/ale/CLionProjects/Astar/sounds/b.wav");
+            break;
+        default:
+            sb.loadFromFile("/home/ale/CLionProjects/Astar/sounds/a.wav");
+            break;
     }
     sound.setBuffer(sb);
-    sound.setPlayingOffset(sf::seconds(0.2));
     sound.play();
 }
 
-bool isConnection() {  //TODO SFML doesn't provide a way to check internet connection.
+bool isConnection() {
     return true;
 }
 
-std::string getTextFromInternet(int what) {
+const std::string getTextFromInternet(int what) {
     if (!isConnection())
         return "error";
 
@@ -40,6 +41,7 @@ std::string getTextFromInternet(int what) {
 
         sf::Http::Request request("/astar/get.php", sf::Http::Request::Post);
         request.setHttpVersion(1, 1);
+
         if (what == 1)
             request.setBody("value=1");
 
@@ -58,7 +60,7 @@ int main() {
 
     Map m(30);
 
-    sf::RenderWindow window(sf::VideoMode(2560, 1400), "Maze");
+    sf::RenderWindow window(sf::VideoMode(2560, 1400), "Astar Maze Solver - Alessandro Amedei - Unifi");
 
     bool buildWall = false;
     bool selectNodes = false;
@@ -66,9 +68,13 @@ int main() {
     int mapsize = 30;
     Node *source;
     Node *goal;
+    unsigned timer = 0;
+
     while (window.isOpen()) {
 
-        m.stringFromInternet = getTextFromInternet(0);
+        if (timer % 50 == 0)
+            m.stringFromInternet = getTextFromInternet(0);
+        timer++;
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -127,7 +133,7 @@ int main() {
                     playSound(0);
                     m.reset(0);
                     count = 0;
-                } else if (x > 2060 && x < 2060 + 80 && y > 555 && y < 555 + 40) {
+                } else if (x > 2030 && x < 2030 + 80 && y > 555 && y < 555 + 40) {
                     playSound(0);
                     m.reset(1);
                 } else if (x > 2140 && x < 2140 + 120 && y > 555 && y < 555 + 40) {
